@@ -105,7 +105,12 @@ def main():
     with st.sidebar:
         
             #open AI API키 입력받기
-            st.session_state["OPENAI_API"] = st.secrets["OPENAI_API_KEY"]
+            st.session_state["OPENAI_API"] = st.text_input(
+    label="OPENAI API 키",
+    placeholder="Enter Your API Key",
+    value="",
+    type="password"
+)
             
             st.markdown("---")
             
