@@ -115,7 +115,7 @@ def main():
             st.markdown("---")
             
             #gpt 모델을 선택하기 위한 라디오 버튼 생성
-            model=st.radio(label="GPT 모델", options=["gpt-4", "gpt-3.5-turbo"])
+            model=st.radio(label="GPT 모델", options=["gpt-4o-mini"])
             
             st.markdown("---")
             
@@ -151,7 +151,11 @@ def main():
      st.subheader("질문/답변")
      if (audio.duration_seconds > 0) and (st.session_state["check_reset"])==False:
          # chatgpt에게 답변 얻기
-         response=ask_gpt(st.session_state["messages"], model, st.session_state["OPENAI_API"])
+         try:
+             response=ask_gpt(st.session_state["messages"], model, st.session_state["OPENAI_API"])
+         except (openai.NotFoundError, openai.PermissionDeniedError):
+             st.error("선택한 답변 모델을 사용할 수 없습니다. API 프로젝트의 모델 접근 권한과 모델 이름을 확인해 주세요.")
+             return
          
          # GPT 모델에 넣을 프롬프트를 위해 답변 내용 저장
          st.session_state["messages"]=st.session_state["messages"]+[{"role":"system", "content":response}]
